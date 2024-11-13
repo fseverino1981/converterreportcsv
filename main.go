@@ -1,9 +1,10 @@
 package main
 
 import (
-	"converterreportcsvtojson/app/adapter"
 	"converterreportcsvtojson/app/legacy"
+	"converterreportcsvtojson/app/strategy"
 	"flag"
+	"fmt"
 	"os"
 
 	toolkit "github.com/fseverino1981/golang-toolkit"
@@ -32,27 +33,10 @@ func main() {
 
 	fullPath := os.Getenv("PATH_OUTPUT")+ *outputFile
 
-	switch *outputType{
-	case "json":
-		reportAdapter := adapter.NewJSONReportAdapter(legacyReport, fullPath)
-		err = reportAdapter.GenerateReport()
-		if err != nil {
-			logger.Error("Erro ao gerar relatório JSON:", err, zap.String("Function", "Main"))
-			return
-		}
-		logger.Info("Relatório JSON gerado com sucesso", zap.String("Function", "Main"))
-		break
-	case "parquet":
-		reportAdapter := adapter.NewParquetReportAdapter(legacyReport, fullPath)
-		err = reportAdapter.GenerateReport()
-		if err != nil {
-			logger.Error("Erro ao gerar relatório Parquet:", err, zap.String("Function", "Main"))
-			return
-		}
-		logger.Info("Relatório Parquet gerado com sucesso", zap.String("Function", "Main"))
-		break
-	default:
-		logger.Info("Parametro outputtype não reconhecido.", zap.String("Function", "Main"))
-		break
-	}	
+	report, err := strategy.ReturnStrategy(*outputType)
+	if err != nil{
+		logger.Error(fmt.Sprintf("Erro ao gerar relatório de saído no formato %s.", *outputType), err, zap.String("Function","Main"))
+	}
+
+	report.GenerateReport(legacyReport, fullPath)
 }

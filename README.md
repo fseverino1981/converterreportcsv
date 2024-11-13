@@ -16,12 +16,15 @@ Este projeto é uma aplicação CLI desenvolvida em Go, com o objetivo de conver
 │   ├── adapter
 │   │   ├── json_adapter.go              # Adapter para conversão para JSON
 │   │   └── parquet_adapter.go           # Adapter para conversão para Parquet
-│   └── legacy
-│       ├── legacy_reporter_generator.go # Código legado para geração de relatórios
-│       └── report_generator_interface.go# Interface para geração de relatórios
+│   ├── legacy
+│   │   ├── legacy_reporter_generator.go # Código legado para geração de relatórios
+│   │   └── report_generator_interface.go# Interface para geração de relatórios
+│   └── strategy
+│       ├── strategies
+│       │   ├── json_strategy.go         # Arquivo estratégia para gerar relatório JSON
+│       │   └── parquet_strategy.go      # Arquivo estratégia para gerar arquivo Parquet
+│       └── report_strategy.go           # Arquivo com a interface do strategy e func para selecionar estratégia
 ├── output_report                        # Diretório para os arquivos de saída gerados
-│   ├── export_json.json                 # Saída no formato JSON
-│   └── export_parquet.parquet           # Saída no formato Parquet
 ├── .env                                 # Arquivo de configuração de ambiente
 ├── converterreportscsvtojson            # Executável do conversor
 ├── export.csv                           # Arquivo CSV de entrada
